@@ -16,12 +16,12 @@ import (
 
 // ServeSingleActor just simplifies the call from main so
 // that onboarding is as easy as possible
-func ServeSingleActor(actor Actor) {
-	Serve(map[string]Actor{actor.Name: actor})
+func ServeSingleActor(actor Actor, port int) {
+	Serve(map[string]Actor{actor.Name: actor}, port)
 }
 
 // Serve starts an http server with all the required handlers
-func Serve(actors map[string]Actor) {
+func Serve(actors map[string]Actor, port int) {
 
 	var webfingerHandler http.HandlerFunc = func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("content-type", "application/jrd+json; charset=utf-8")
@@ -348,7 +348,6 @@ func Serve(actors map[string]Actor) {
 	gorilla.HandleFunc("/{actor}/item/{hash}", postHandler)
 	http.Handle("/", gorilla)
 
-        fmt.Println("detson serve7937")
 	// log.Fatal(http.ListenAndServe(":8081", nil))
-	log.Fatal(http.ListenAndServe(":7937", nil))
+	log.Fatal(http.ListenAndServe(":"+strconv.Itoa(port), nil))
 }
